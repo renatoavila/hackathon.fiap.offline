@@ -2,11 +2,13 @@ package com.hackathon.lep.offline.utils;
 
 import com.hackathon.lep.offline.configuration.EmailCredentials;
 import com.hackathon.lep.offline.model.vo.EmailVO;
+import com.hackathon.lep.offline.service.PostService;
 import com.sun.mail.imap.IMAPStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -16,6 +18,7 @@ import javax.mail.search.AndTerm;
 import javax.mail.search.FlagTerm;
 import javax.mail.search.SearchTerm;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -34,6 +37,7 @@ public class EmailVerifierUtil {
 
 	private EmailCredentials emailCredentials;
 	private IMAPStore imapStore;
+	
 
 	@Autowired
 	public EmailVerifierUtil(EmailCredentials emailCredentials) {
@@ -97,15 +101,19 @@ public class EmailVerifierUtil {
 
 				System.out.println("Email: ");
 				System.out.println("- - - - - - - ");
-				System.out.println(emails.get(i).toString());
+				System.out.println("From");
+				System.out.println(emails.get(i).getFrom());
+				System.out.println("Content ");
+				System.out.println(emails.get(i).getContent());
 				System.out.println("- - - - - - - ");
 
-				//message.setFlag(Flags.Flag.SEEN, true);
+				message.setFlag(Flags.Flag.SEEN, true);
 			}
 		}
 
 		return emails;
 	}
+	
 	
 	  private String getTextFromMessage(Message message)  {
 		  String body = "";
